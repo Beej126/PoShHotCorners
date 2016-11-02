@@ -1,5 +1,5 @@
 # PoShHotCorners
-PowerShell ["Hot Corners"](https://en.wikipedia.org/wiki/Screen_hotspot)
+["Hot Corners"](https://en.wikipedia.org/wiki/Screen_hotspot) for Windows 
 
 ## install
 * none really, simply download the ico and ps1 files to a folder and launch the ps1 
