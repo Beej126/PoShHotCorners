@@ -41,6 +41,7 @@ Add-Type -AssemblyName System.Windows.Forms
 
 $notifyIcon = New-Object System.Windows.Forms.NotifyIcon
 $notifyIcon.Icon = New-Object System.Drawing.Icon "$(Split-Path -parent $PSCommandPath)\icon.ico"
+$notifyIcon.Text = "Hot Corners"
 
 $notifyIcon.add_MouseDown( { 
   if ($script:contextMenu.Visible) { $script:contextMenu.Hide(); return }
