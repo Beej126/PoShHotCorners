@@ -1,13 +1,5 @@
-# Source: http://www.powershellmagazine.com/2013/07/18/pstip-how-to-switch-off-display-with-powershell/
-
 # Turn display off by calling WindowsAPI.
- 
-# SendMessage(HWND_BROADCAST,WM_SYSCOMMAND, SC_MONITORPOWER, POWER_OFF)
-# HWND_BROADCAST  0xffff
-# WM_SYSCOMMAND   0x0112
-# SC_MONITORPOWER 0xf170
-# POWER_OFF       0x0002
- 
+# from: http://www.powershellmagazine.com/2013/07/18/pstip-how-to-switch-off-display-with-powershell/
 Add-Type -TypeDefinition '
 using System;
 using System.Runtime.InteropServices;
@@ -36,7 +28,6 @@ namespace Utilities {
 }
 '
 
-#this article got me rolling: http://stackoverflow.com/questions/15505812/why-dont-add-eventname-work-with-timer
 Add-Type -AssemblyName System.Windows.Forms
 
 $notifyIcon = New-Object System.Windows.Forms.NotifyIcon
@@ -70,13 +61,14 @@ $timer.add_Elapsed({
      / __  /  __/ /  /  __/ (__  )  / /_/ / / /  __/  / /_/ /  __/  __/ __/  
     /_/ /_/\___/_/   \___/ /____/   \__/_/ /_/\___/  /_.___/\___/\___/_/     #>
   # currently set to trigger at lower right corner... season to your own taste (e.g. upper left = 0,0)
-  if ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10) { [Utilities.Display]::PowerOff() }
+  if ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10 -and $bounds.X) { [Utilities.Display]::PowerOff() }
 
   #run the ps1 from command line to see this output
   #debug: Write-Host "x: $($mouse.X), y:$($mouse.Y), width: $($bounds.Width), height: $($bounds.Height), sleep: $($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10)"
 })
 
 #frugally reusing $contextMenu vs firing up another blank form, not really necessary but i was curious if it'd work... the notify icon itself does not implement InvokeRequired
+#see this for why SynchronizingObject necessary: http://stackoverflow.com/questions/15505812/why-dont-add-eventname-work-with-timer
 $timer.SynchronizingObject = $contextMenu
 
 $timer.start()
