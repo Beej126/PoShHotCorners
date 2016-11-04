@@ -36,6 +36,7 @@ namespace Utilities {
 }
 '
 
+#this article got me rolling: http://stackoverflow.com/questions/15505812/why-dont-add-eventname-work-with-timer
 Add-Type -AssemblyName System.Windows.Forms
 
 $notifyIcon = New-Object System.Windows.Forms.NotifyIcon
@@ -62,21 +63,20 @@ $timer.Interval = 500
 $timer.add_Elapsed({
   $mouse = [System.Windows.Forms.Cursor]::Position
   $bounds = [System.Windows.Forms.Screen]::FromPoint($mouse).Bounds #thank you! - http://stackoverflow.com/questions/26402955/finding-monitor-screen-on-which-mouse-pointer-is-present
- 
+
   <#    __  __              _          __  __            __              ____
        / / / /__  ________ ( )_____   / /_/ /_  ___     / /_  ___  ___  / __/
       / /_/ / _ \/ ___/ _ \|// ___/  / __/ __ \/ _ \   / __ \/ _ \/ _ \/ /_  
      / __  /  __/ /  /  __/ (__  )  / /_/ / / /  __/  / /_/ /  __/  __/ __/  
     /_/ /_/\___/_/   \___/ /____/   \__/_/ /_/\___/  /_.___/\___/\___/_/     #>
   # currently set to trigger at lower right corner... season to your own taste (e.g. upper left = 0,0)
-  if ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10 -and $bounds.X) { [Utilities.Display]::PowerOff() }
+  if ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10) { [Utilities.Display]::PowerOff() }
 
   #run the ps1 from command line to see this output
   #debug: Write-Host "x: $($mouse.X), y:$($mouse.Y), width: $($bounds.Width), height: $($bounds.Height), sleep: $($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10)"
 })
 
 #frugally reusing $contextMenu vs firing up another blank form, not really necessary but i was curious if it'd work... the notify icon itself does not implement InvokeRequired
-#see this for why SynchronizingObject is necessary: http://stackoverflow.com/questions/15505812/why-dont-add-eventname-work-with-timer
 $timer.SynchronizingObject = $contextMenu
 
 $timer.start()
