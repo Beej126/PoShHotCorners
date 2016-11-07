@@ -11,7 +11,7 @@
 * the lion share of the code is actually just for the task tray icon...
 * look for "beef" as the key line where mouse location triggers action
 * DOES work with multiple monitors.
-* update - added tray menu options for blanking individual displays
+* includes tray menu options for blanking displays independently
 * the timer loop inherently keeps watching the mouse so if your screens stubbornly randomly wake up like mine, this will bonk them right back to nappy time, yes!
 
 ## supporting multiple extended displays
