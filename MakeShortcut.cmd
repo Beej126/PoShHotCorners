@@ -1,4 +1,6 @@
-@echo off
+@ECHO OFF
+SETLOCAL
+
 ::**** xxmklink args in order left to right
 ::path of the shortcut (.lnk added as needed)
 ::path of the object represented by the shortcut
@@ -10,4 +12,17 @@
 
 "%~dp0xxmklink" "%~dp0PoShHotCorners.lnk" PowerShell.exe "-WindowStyle Hidden %~dp0PoShHotCorners.ps1" "" "Windows PowerShell Hot Corners" 7 "%~dp0Icon.ico"
 
-if %errorlevel% neq 0 pause
+if %errorlevel% neq 0 (
+  pause
+  exit
+)
+
+echo.
+echo.
+echo *******************************************************
+set install=Y
+set /p install="copy shortcut to your auto startup folder [Y/n]: " 
+IF %install% equ Y (
+  copy "%~dp0PoShHotCorners.lnk" "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup"
+  start "auto startup" "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup"
+)
