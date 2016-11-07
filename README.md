@@ -11,6 +11,7 @@
 * the lion share of the code is actually just for the task tray icon...
 * look for "beef" as the key line where mouse location triggers action
 * DOES work with multiple monitors.
+* update - added tray menu options for blanking individual displays
 * the timer loop inherently keeps watching the mouse so if your screens stubbornly randomly wake up like mine, this will bonk them right back to nappy time, yes!
 
 ## supporting multiple extended displays
@@ -33,7 +34,7 @@
 * so that's where the $mouse.X-$bounds.X in the "beef" check works for me...
 * hopefully that approach will carry through other monitor arragements with a little testing
 
-![image](https://cloud.githubusercontent.com/assets/6301228/19920053/a7db19b0-a093-11e6-8c7c-19eca3e24c5c.png)
+![](https://cloud.githubusercontent.com/assets/6301228/20070283/ab4e62e2-a4d4-11e6-84ab-70abd4ff34b9.png)
 
-![shortcut snapshot](https://cloud.githubusercontent.com/assets/6301228/19919989/292fb6fc-a093-11e6-8d34-876ff3e5b4ac.png)
+![](https://cloud.githubusercontent.com/assets/6301228/19919989/292fb6fc-a093-11e6-8d34-876ff3e5b4ac.png)
 
