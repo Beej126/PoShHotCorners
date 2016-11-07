@@ -3,15 +3,16 @@
 
 ## install
 * none really, simply download the ico and ps1 files to a folder and launch the ps1 
-* for a little extra polish... go ahead and create a shortcut, configure it's shortcut icon, throw it in your Startup folder ("%appdata%\Microsoft\Windows\Start Menu\Programs\Startup") and set the shortcut target to:
-  * ```PowerShell -WindowStyle Hidden "{full path to your ps1 file}.ps1"```
+* please note MakeShortcut.cmd batch file provided for convenience ... 
+  * throw resulting .lnk file in your "run on startup" folder if you like: ```"%appdata%\Microsoft\Windows\Start Menu\Programs\Startup"```
+  * as you can see, the batch file simply runs shortcut tool [xxmklink.exe](http://www.xxcopy.com/xxcopy38.htm) with appropriate arguments
 
 ## notes
-* currently set to put power down monitors triggered by mouse in lower right corner but it's just powershell so the sky's the limit.
+* currently coded to put power down monitors triggered by mouse in lower right corner but it's just powershell so the sky's the limit.
 * the lion share of the code is actually just for the task tray icon...
-* look for "beef" as the key line where mouse location triggers action
+* look for **"beef"** as the key line where mouse location triggers action
 * DOES work with multiple monitors.
-* includes tray menu options for blanking displays independently
+  * also includes tray menu options for blanking multiple displays independently
 * the timer loop inherently keeps watching the mouse so if your screens stubbornly randomly wake up like mine, this will bonk them right back to nappy time, yes!
 
 ## supporting multiple extended displays
@@ -36,5 +37,4 @@
 
 ![](https://cloud.githubusercontent.com/assets/6301228/20070283/ab4e62e2-a4d4-11e6-84ab-70abd4ff34b9.png)
 
-![](https://cloud.githubusercontent.com/assets/6301228/19919989/292fb6fc-a093-11e6-8d34-876ff3e5b4ac.png)
 
