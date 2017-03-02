@@ -1,6 +1,8 @@
 # PoShHotCorners
 ["Hot Corners"](https://en.wikipedia.org/wiki/Screen_hotspot) for Windows 
 
+![](https://cloud.githubusercontent.com/assets/6301228/20070283/ab4e62e2-a4d4-11e6-84ab-70abd4ff34b9.png)
+
 ## install
 * none really, simply download the ico and ps1 files to a folder and launch the ps1 
 * please note MakeShortcut.cmd batch file provided for convenience ... 
@@ -34,8 +36,6 @@
 * i have 2 screens side-by-side, so note the Bounds of the first where X has a value...
 * so that's where the $mouse.X-$bounds.X in the "beef" check works for me...
 * hopefully that approach will carry through other monitor arragements with a little testing
-
-![](https://cloud.githubusercontent.com/assets/6301228/20070283/ab4e62e2-a4d4-11e6-84ab-70abd4ff34b9.png)
 
 ## tips
 * if you find that your windows get all jumbled after sleeping the monitors, [this post](http://superuser.com/questions/453446/how-can-i-stop-windows-re-positioning-after-waking-from-sleep) actually seemed to help... but all i did was simply delete the whole registry folder `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Configuration` (i probably had at least 50 entries in there) and let Windows recreate.
