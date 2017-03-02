@@ -37,4 +37,6 @@
 
 ![](https://cloud.githubusercontent.com/assets/6301228/20070283/ab4e62e2-a4d4-11e6-84ab-70abd4ff34b9.png)
 
+## tips
+* if you find that your windows get all jumbled after sleeping the monitors, [this post](http://superuser.com/questions/453446/how-can-i-stop-windows-re-positioning-after-waking-from-sleep) actually seemed to help... but all i did was simply delete the whole registry folder `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Configuration` (i probably had at least 50 entries in there) and let Windows recreate.
 
