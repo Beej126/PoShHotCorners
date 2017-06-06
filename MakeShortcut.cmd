@@ -10,7 +10,7 @@ SETLOCAL
 ::display mode (1:Normal [default], 3:Maximized, 7:Minimized)
 ::icon file [with optional icon index value n]
 
-"%~dp0xxmklink" "%~dp0PoShHotCorners.lnk" PowerShell.exe "-WindowStyle Hidden %~dp0PoShHotCorners.ps1" "" "Windows PowerShell Hot Corners" 7 "%~dp0Icon.ico"
+"%~dp0xxmklink" "%~dp0PoShHotCorners.lnk" PowerShell.exe "-ExecutionPolicy Bypass -WindowStyle Hidden %~dp0PoShHotCorners.ps1" "" "Windows PowerShell Hot Corners" 7 "%~dp0Icon.ico"
 
 if %errorlevel% neq 0 (
   pause
