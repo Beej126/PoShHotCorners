@@ -66,7 +66,7 @@ $notifyIcon.ContextMenuStrip = $contextMenu
   $frmBlank.Hide()
 
   $menuItem = $contextMenu.Items.Add("Blank $($frmBlank.Text)")
-  $menuItem.Tag = New-Object –TypeName PSObject -Property @{Form = $frmBlank; Bounds = $_.Bounds}
+  $menuItem.Tag = New-Object â€“TypeName PSObject -Property @{Form = $frmBlank; Bounds = $_.Bounds}
 
   $menuItem.add_Click({
     $thisForm = $this.Tag.Form
@@ -85,18 +85,28 @@ $timer.Interval = 1000
 $timer.add_Elapsed({
   $mouse = [System.Windows.Forms.Cursor]::Position
   $bounds = [System.Windows.Forms.Screen]::FromPoint($mouse).Bounds #thank you! - http://stackoverflow.com/questions/26402955/finding-monitor-screen-on-which-mouse-pointer-is-present
-
+  #future self objected to the non-searchable nature of said "BEEF"
   <#  __  __              _          __  __            __              ____
      / / / /__  ________ ( )_____   / /_/ /_  ___     / /_  ___  ___  / __/
     / /_/ / _ \/ ___/ _ \|// ___/  / __/ __ \/ _ \   / __ \/ _ \/ _ \/ /_  
    / __  /  __/ /  /  __/ (__  )  / /_/ / / /  __/  / /_/ /  __/  __/ __/  
   /_/ /_/\___/_/   \___/ /____/   \__/_/ /_/\___/  /_.___/\___/\___/_/     #>
-  # currently set to trigger at lower right corner... season to your own taste (e.g. upper left = 0,0)
-  if ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10 `
-    -and $bounds.X) # target second screen specifically
-    { [Utilities.Display]::PowerOff() }
+  
+  # mouse/screen coords are UPPER LEFT is X=0,Y=0 ... then clockwise, so
+  # the following expression currently triggers at LOWER RIGHT corner (i.e. mouseX within 10px of right edge, mouseY 10px from bottom edge)
     
-  #run the ps1 from command line to see this output
+  if ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10 `
+  
+    # then, this offset targets my second screen, see readme.md or drop me an issue if no worky for you
+    -and $bounds.X)
+    
+    # this is the only trigger command i care about... but i assume everyone has their own "hot corner", haha yeah ;)
+    { [Utilities.Display]::PowerOff() }
+  
+  #####################
+  ### for debugging ###
+  #####################
+  # run the ps1 from command line to see this output
   #debug: Write-Host "x: $($mouse.X), y:$($mouse.Y), width: $($bounds.Width), height: $($bounds.Height), sleep: $($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10)"
 })
 
