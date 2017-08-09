@@ -92,22 +92,28 @@ $timer.add_Elapsed({
    / __  /  __/ /  /  __/ (__  )  / /_/ / / /  __/  / /_/ /  __/  __/ __/  
   /_/ /_/\___/_/   \___/ /____/   \__/_/ /_/\___/  /_.___/\___/\___/_/     #>
   
-  # mouse/screen coords are UPPER LEFT is X=0,Y=0 ... then clockwise, so
-  # the following expression currently triggers at LOWER RIGHT corner (i.e. mouseX within 10px of right edge, mouseY 10px from bottom edge)
-    
+  # mouse/screen coords are based on UPPER LEFT equals X=0,Y=0
+  # just expand this to multiple IF blocks to support triggers in additional mouse locations
+  
+  # the following expression currently triggers at the LOWER RIGHT corner
+  # i.e. mouseX within 10px of right edge, mouseY 10px from bottom edge
   if ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10 `
   
-    # then, this offset targets my second screen, see readme.md or drop me an issue if no worky for you
-    -and $bounds.X)
+    # this targets my second screen on the right where the Screen.Bounds.X has a non zero value.
+    # see readme.md for brief explanation, or drop me an issue if no worky for your monitor arrangement.
+    -and $bounds.X) {
     
-    # this is the only trigger command i care about... but i assume everyone has their own "hot corner", haha yeah ;)
-    { [Utilities.Display]::PowerOff() }
+    # so far this is the only trigger command i care to have:
+    [Utilities.Display]::PowerOff()
+    # yet naturally this could be anything; e.g. launch screensaver would simply be:
+    # & (Get-ItemProperty 'HKCU:Control Panel\Desktop').{SCRNSAVE.EXE}
+  }
   
-  #####################
-  ### for debugging ###
-  #####################
-  # run the ps1 from command line to see this output
-  #debug: Write-Host "x: $($mouse.X), y:$($mouse.Y), width: $($bounds.Width), height: $($bounds.Height), sleep: $($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10)"
+  ###################################################################################################
+  ### uncomment the following to determine mouse coords for your (multiple) monitor configuration ###
+  ###################################################################################################
+  # run the ps1 from console to see this output
+  #debug: Write-Host "x: $($mouse.X), y:$($mouse.Y), width: $($bounds.Width), height: $($bounds.Height), trigger: $($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10)"
 })
 
 #just to initialize the window handle to give to $timer.SynchronizingObject below
