@@ -86,7 +86,7 @@ $timer.add_Elapsed({
   $mouse = [System.Windows.Forms.Cursor]::Position
   $bounds = [System.Windows.Forms.Screen]::FromPoint($mouse).Bounds #thank you! - http://stackoverflow.com/questions/26402955/finding-monitor-screen-on-which-mouse-pointer-is-present
 
-  #future self objected to the non-searchable nature of said "BEEF"
+  # Here's the BEEF
   <#  __  __              _          __  __            __              ____
      / / / /__  ________ ( )_____   / /_/ /_  ___     / /_  ___  ___  / __/
     / /_/ / _ \/ ___/ _ \|// ___/  / __/ __ \/ _ \   / __ \/ _ \/ _ \/ /_  
@@ -98,19 +98,15 @@ $timer.add_Elapsed({
   
   # the following expression currently triggers at the LOWER RIGHT corner
   # i.e. mouseX within 10px of right edge, mouseY 10px from bottom edge
-  if ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10)
+  if ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10) # lower right corner
   {
     # this targets my second screen on the right where the Screen.Bounds.X has a non zero value.
     # see readme.md for brief explanation, or drop me an issue if no worky for your monitor arrangement.
     #-and $bounds.X) {
     
-    # so far this is the only trigger command i care to have:
     [Utilities.Display]::PowerOff()
-    # yet naturally this could be anything; e.g. launch screensaver would simply be:
-    # & (Get-ItemProperty 'HKCU:Control Panel\Desktop').{SCRNSAVE.EXE}
   }
   elseif ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt -10) # upper right corner
-    <# only for 2nd screen to right: -and $bounds.X #>
   {
     & (Get-ItemProperty "HKCU:\Control Panel\Desktop").{SCRNSAVE.EXE} 
   }
