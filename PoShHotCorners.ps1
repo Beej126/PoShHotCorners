@@ -56,7 +56,7 @@ $notifyIcon.ContextMenuStrip = $contextMenu
   # create a blank window to selectively blank out one screen without the other
   $frmBlank =  New-Object System.Windows.Forms.Form
   $frmBlank.Text = $_.DeviceName.Replace("\\.\", "") 
-  $frmBlank.BackColor = "Black"
+  $frmBlank.BackColor = [System.Drawing.Color]::FromName("Black")
   $frmBlank.ShowInTaskbar = $false
   $frmBlank.TopMost = $true
   $frmBlank.Show() #crucial sequence to show and then set bounds or else window top/left don't get set properly
@@ -86,26 +86,40 @@ $timer.add_Elapsed({
   $mouse = [System.Windows.Forms.Cursor]::Position
   $bounds = [System.Windows.Forms.Screen]::FromPoint($mouse).Bounds #thank you! - http://stackoverflow.com/questions/26402955/finding-monitor-screen-on-which-mouse-pointer-is-present
 
+  #future self objected to the non-searchable nature of said "BEEF"
   <#  __  __              _          __  __            __              ____
      / / / /__  ________ ( )_____   / /_/ /_  ___     / /_  ___  ___  / __/
     / /_/ / _ \/ ___/ _ \|// ___/  / __/ __ \/ _ \   / __ \/ _ \/ _ \/ /_  
    / __  /  __/ /  /  __/ (__  )  / /_/ / / /  __/  / /_/ /  __/  __/ __/  
   /_/ /_/\___/_/   \___/ /____/   \__/_/ /_/\___/  /_.___/\___/\___/_/     #>
-  # currently set to trigger at lower right corner... season to your own taste (e.g. upper left = 0,0)
-  # only for 2nd screen to right: -and $bounds.X
+
+  # mouse/screen coords are based on UPPER LEFT equals X=0,Y=0
+  # just expand this to multiple IF blocks to support triggers in additional mouse locations
+  
+  # the following expression currently triggers at the LOWER RIGHT corner
+  # i.e. mouseX within 10px of right edge, mouseY 10px from bottom edge
   if ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10)
-  { 
+  {
+    # this targets my second screen on the right where the Screen.Bounds.X has a non zero value.
+    # see readme.md for brief explanation, or drop me an issue if no worky for your monitor arrangement.
+    #-and $bounds.X) {
+    
+    # so far this is the only trigger command i care to have:
     [Utilities.Display]::PowerOff()
+    # yet naturally this could be anything; e.g. launch screensaver would simply be:
+    # & (Get-ItemProperty 'HKCU:Control Panel\Desktop').{SCRNSAVE.EXE}
   }
   elseif ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt -10) # upper right corner
     <# only for 2nd screen to right: -and $bounds.X #>
   {
     & (Get-ItemProperty "HKCU:\Control Panel\Desktop").{SCRNSAVE.EXE} 
   }
-
   
-  #run the ps1 from command line to see this output
-  #debug:Write-Host "x: $($mouse.X), y:$($mouse.Y), width: $($bounds.Width), height: $($bounds.Height), bounds.X: $($bounds.X), sleep: $($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10)"
+  ###################################################################################################
+  ### uncomment the following to determine mouse coords for your (multiple) monitor configuration ###
+  ###################################################################################################
+  # run the ps1 from console to see this output
+  #debug: Write-Host "x: $($mouse.X), y:$($mouse.Y), width: $($bounds.Width), height: $($bounds.Height), trigger: $($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10)"
 })
 
 #just to initialize the window handle to give to $timer.SynchronizingObject below
