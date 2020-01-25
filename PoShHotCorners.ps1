@@ -66,7 +66,7 @@ $notifyIcon.ContextMenuStrip = $contextMenu
   $frmBlank.Hide()
 
   $menuItem = $contextMenu.Items.Add("Blank $($frmBlank.Text)")
-  $menuItem.Tag = New-Object –TypeName PSObject -Property @{Form = $frmBlank; Bounds = $_.Bounds}
+  $menuItem.Tag = New-Object -TypeName PSObject -Property @{Form = $frmBlank; Bounds = $_.Bounds}
 
   $menuItem.add_Click({
     $thisForm = $this.Tag.Form
@@ -92,12 +92,20 @@ $timer.add_Elapsed({
    / __  /  __/ /  /  __/ (__  )  / /_/ / / /  __/  / /_/ /  __/  __/ __/  
   /_/ /_/\___/_/   \___/ /____/   \__/_/ /_/\___/  /_.___/\___/\___/_/     #>
   # currently set to trigger at lower right corner... season to your own taste (e.g. upper left = 0,0)
-  if ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10 `
-    -and $bounds.X) # target second screen specifically
-    { [Utilities.Display]::PowerOff() }
-    
+  # only for 2nd screen to right: -and $bounds.X
+  if ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10)
+  { 
+    [Utilities.Display]::PowerOff()
+  }
+  elseif ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt -10) # upper right corner
+    <# only for 2nd screen to right: -and $bounds.X #>
+  {
+    & (Get-ItemProperty "HKCU:\Control Panel\Desktop").{SCRNSAVE.EXE} 
+  }
+
+  
   #run the ps1 from command line to see this output
-  #debug: Write-Host "x: $($mouse.X), y:$($mouse.Y), width: $($bounds.Width), height: $($bounds.Height), sleep: $($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10)"
+  #debug:Write-Host "x: $($mouse.X), y:$($mouse.Y), width: $($bounds.Width), height: $($bounds.Height), bounds.X: $($bounds.X), sleep: $($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt $bounds.Height-10)"
 })
 
 #just to initialize the window handle to give to $timer.SynchronizingObject below

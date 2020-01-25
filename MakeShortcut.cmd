@@ -10,19 +10,21 @@ SETLOCAL
 ::display mode (1:Normal [default], 3:Maximized, 7:Minimized)
 ::icon file [with optional icon index value n]
 
-"%~dp0xxmklink" "%~dp0PoShHotCorners.lnk" PowerShell.exe "-WindowStyle Hidden %~dp0PoShHotCorners.ps1" "" "Windows PowerShell Hot Corners" 7 "%~dp0Icon.ico"
+:: -new_console:z - overrides cmder/conemu as default shell so that windowstyle hidden works
+
+"%~dp0xxmklink" "%~dp0PoShHotCorners.lnk" PowerShell.exe "-new_console:z -ExecutionPolicy Bypass -WindowStyle Hidden -File ^"%~dp0PoShHotCorners.ps1^"" "" "Windows PowerShell Hot Corners" 7 "%~dp0Icon.ico"
 
 if %errorlevel% neq 0 (
   pause
-  exit
+  exit /b 1
 )
 
 echo.
 echo.
 echo *******************************************************
 set install=Y
-set /p install="copy shortcut to your auto startup folder [Y/n]: " 
+set /p install="copy shortcut to your auto startup folder [Y/n]: "
 IF %install% equ Y (
   copy "%~dp0PoShHotCorners.lnk" "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup"
-  start "auto startup" "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup"
+  start "" "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup"
 )
