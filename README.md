@@ -10,7 +10,10 @@
   * as you can see, the batch file simply runs shortcut tool [xxmklink.exe](http://www.xxcopy.com/xxcopy38.htm) with appropriate arguments
 
 ## notes
-* currently coded to power down monitors triggered by mouse in lower right corner ... but it's just powershell folks, so think grand!
+* currently:
+  * lower right corner = power off monitor(s)
+  * upper right corner = screensaver
+- ... but it's just powershell folks, so think grand!
 * the lion's share of the code is actually just for the task tray icon...
 * look for **"beef"** as the key line where mouse location triggers action
 * DOES work with multiple monitors.
@@ -39,4 +42,5 @@
 
 ## tips
 * if you find that your windows get all jumbled after sleeping the monitors, [this post](http://superuser.com/questions/453446/how-can-i-stop-windows-re-positioning-after-waking-from-sleep) actually seemed to help... but all i did was simply delete the whole registry folder `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Configuration` (i probably had at least 50 entries in there) and let Windows recreate.
-
+* love the ol' *Flurry* screensaver =) https://www.wincustomize.com/explore/screensavers/75
+  <img width="200" style="float: right" src="https://user-images.githubusercontent.com/6301228/74005888-01295d00-492f-11ea-8cf9-24abeffe9c07.png">
