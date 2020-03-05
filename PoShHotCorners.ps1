@@ -80,6 +80,9 @@ $notifyIcon.ContextMenuStrip = $contextMenu
 
 $contextMenu.Items.Add( "E&xit", $null, { $notifyIcon.Visible = $false; [System.Windows.Forms.Application]::Exit() } ) | Out-Null
 
+$screenSaverPath = (Get-ItemProperty "HKCU:\Control Panel\Desktop").{SCRNSAVE.EXE}
+$screenSaverFileName = [System.IO.Path]::GetFileName($screenSaverPath)
+
 $timer = New-Object System.Timers.Timer
 $timer.Interval = 1000
 $timer.add_Elapsed({
@@ -106,9 +109,11 @@ $timer.add_Elapsed({
     
     [Utilities.Display]::PowerOff()
   }
-  elseif ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -gt -10) # upper right corner
+  elseif ($mouse.X-$bounds.X -gt $bounds.Width-10 -and $mouse.Y -lt 10) # upper right corner
   {
-    & (Get-ItemProperty "HKCU:\Control Panel\Desktop").{SCRNSAVE.EXE} 
+    if (!(get-process $screenSaverFileName -ErrorAction SilentlyContinue)) {
+      & $screenSaverPath
+    }
   }
   
   ###################################################################################################
