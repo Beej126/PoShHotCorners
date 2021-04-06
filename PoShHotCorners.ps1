@@ -3,28 +3,43 @@
 Add-Type -TypeDefinition '
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
-namespace Utilities {
-   public static class Display
-   {
-      [DllImport("user32.dll", CharSet = CharSet.Auto)]
-      private static extern IntPtr SendMessage(
-         IntPtr hWnd,
-         UInt32 Msg,
-         IntPtr wParam,
-         IntPtr lParam
+public static class Win32Helpers
+{
+  [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+  public static extern int GetLongPathName(
+      [MarshalAs(UnmanagedType.LPTStr)]
+      string path,
+      [MarshalAs(UnmanagedType.LPTStr)]
+      StringBuilder longPath,
+      int longPathLength
+  );
+
+  public static string GetLongPath(string shortPath)
+  {
+    StringBuilder longPath = new StringBuilder(255);
+    GetLongPathName(shortPath, longPath, longPath.Capacity);
+    return longPath.ToString();
+  }
+
+  [DllImport("user32.dll", CharSet = CharSet.Auto)]
+  private static extern IntPtr SendMessage(
+    IntPtr hWnd,
+    UInt32 Msg,
+    IntPtr wParam,
+    IntPtr lParam
+  );
+
+  public static void PowerOff ()
+  {
+      SendMessage(
+        (IntPtr)0xffff, // HWND_BROADCAST
+        0x0112,         // WM_SYSCOMMAND
+        (IntPtr)0xf170, // SC_MONITORPOWER
+        (IntPtr)0x0002  // POWER_OFF
       );
-
-      public static void PowerOff ()
-      {
-         SendMessage(
-            (IntPtr)0xffff, // HWND_BROADCAST
-            0x0112,         // WM_SYSCOMMAND
-            (IntPtr)0xf170, // SC_MONITORPOWER
-            (IntPtr)0x0002  // POWER_OFF
-         );
-      }
-   }
+  }
 }
 '
 
@@ -82,7 +97,8 @@ if ([System.Windows.Forms.Screen]::AllScreens.length -gt 1) {
 
 $contextMenu.Items.Add( "E&xit", $null, { $notifyIcon.Visible = $false; [System.Windows.Forms.Application]::Exit() } ) | Out-Null
 
-$screenSaverPath = (Get-ItemProperty "HKCU:\Control Panel\Desktop"). { SCRNSAVE.EXE }
+$screenSaverPath = (Get-ItemProperty "HKCU:\Control Panel\Desktop").{SCRNSAVE.EXE}
+$screenSaverPath = [Win32Helpers]::GetLongPath($screenSaverPath) #this converts what is often an old school 8.3 tilde short path to a long path that powershell core can launch, legacy powershell didn't have this problem
 $screenSaverFileName = [System.IO.Path]::GetFileName($screenSaverPath)
 
 $timer = New-Object System.Timers.Timer
@@ -106,13 +122,14 @@ $timer.add_Elapsed( {
 
     # this targets my second screen on the right where the Screen.Bounds.X has a non zero value.
     # see readme.md for brief explanation, or drop me an issue if no worky for your monitor arrangement.
-    if ($mouse.X - $bounds.X -gt $bounds.Width - 10 -and $mouse.Y -gt $bounds.Height - 10) { # lower right corner
+    
+    if ($mouse.X -lt 10 -and $mouse.Y -lt 10) { # upper left corner
 
       # invoke Windows lock screen
-      Invoke-Command { rundll32.exe user32.dll, LockWorkStation }
+      #Invoke-Command { rundll32.exe user32.dll, LockWorkStation }
 
       # and turn off the display
-      [Utilities.Display]::PowerOff()
+      [Win32Helpers]::PowerOff()
     }
     elseif ($mouse.X - $bounds.X -gt $bounds.Width - 10 -and $mouse.Y -lt 10) { # upper right corner
       if (!(get-process $screenSaverFileName -ErrorAction SilentlyContinue)) {

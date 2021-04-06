@@ -16,7 +16,7 @@ echo.
 echo.
 echo *******************************************************
 set install=Y
-set /p install="copy shortcut to your auto startup folder [Y/n]: "
+set /p install="copy shortcut to your auto startup folder ('%appdata%\Microsoft\Windows\Start Menu\Programs\Startup') [Y/n]: "
 IF %install% equ Y (
   copy "%~dp0%shortcutfilename%.lnk" "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup"
   start "" "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup"
